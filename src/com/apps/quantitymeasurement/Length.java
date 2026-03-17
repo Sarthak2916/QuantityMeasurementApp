@@ -1,5 +1,8 @@
 package com.apps.quantitymeasurement;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Length {
 
     private double value;
@@ -35,24 +38,34 @@ public class Length {
         return Double.compare(this.convertedValue,length.convertedValue)==0 ? true:false;
     }
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(Object obj) throws IllegalArgumentException{
         if(obj==this) return true;
-        if(obj==null || obj.getClass()!=Length.class) return false;
+        if(obj==null || obj.getClass()!=Length.class) throw new IllegalArgumentException("Not a valid Argument");
         return compare((Length) obj);
+    }
+
+    public Length convertTo(LengthUnit targetUnit) throws IllegalArgumentException{
+        if(targetUnit==null) throw new IllegalArgumentException("Not a valid Argument");
+        double value=convertedValue/targetUnit.getConversionFactor();
+        BigDecimal bd= new BigDecimal(value);
+        bd= bd.setScale(2, RoundingMode.HALF_UP);
+        double roundedVal= bd.doubleValue();
+        return new Length(roundedVal, targetUnit);
+    }
+
+    public String toString(){
+        return value+" "+unit;
     }
 
     public static void main(String[] args) {
 
-        Length l1= new Length(5,LengthUnit.FEET);
-        Length l2= new Length(60,LengthUnit.INCHES);
+        Length l1= new Length(27,LengthUnit.FEET);
+        Length l2= new Length(9,LengthUnit.YARDS);
         System.out.println("Are lengths equal: "+l1.equals(l2));
 
-        Length l3= new Length(27,LengthUnit.FEET);
-        Length l4= new Length(9,LengthUnit.YARDS);
-        System.out.println("Are lengths equal: "+l3.equals(l4));
+        Length len1= new Length(5, LengthUnit.FEET);
+        Length converted= len1.convertTo(LengthUnit.INCHES);
+        System.out.println(converted.toString());
 
-        Length l5= new Length(100,LengthUnit.CENTIMETERS);
-        Length l6= new Length(39.3701,LengthUnit.INCHES);
-        System.out.println("Are lengths equal: "+l5.equals(l6));
     }
 }

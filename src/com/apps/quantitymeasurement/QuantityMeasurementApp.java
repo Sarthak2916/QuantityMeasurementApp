@@ -16,12 +16,23 @@ public class QuantityMeasurementApp {
         System.out.println("Are lengths "+val1+" "+unit1+" and "+val2+" "+unit2+" equal: "+result);
     }
 
+    public static Length demonstrateLengthConversion(double value, LengthUnit fromUnit, LengthUnit toUnit){
+        return new Length(value,fromUnit).convertTo(toUnit);
+    }
+    public static Length demonstrateLengthConversion(Length length, LengthUnit toUnit){
+        return length.convertTo(toUnit);
+    }
+
     public static void main(String[] args) {
 
-        demonstrateLengthComparison(12,LengthUnit.INCHES,1,LengthUnit.FEET);
-        demonstrateLengthComparison(36,LengthUnit.INCHES,1,LengthUnit.YARDS);
         demonstrateLengthComparison(30,LengthUnit.FEET,10,LengthUnit.YARDS);
         demonstrateLengthComparison(0.393701,LengthUnit.INCHES,1,LengthUnit.CENTIMETERS);
+
+        Length feetToInches= demonstrateLengthConversion(4,LengthUnit.FEET,LengthUnit.INCHES);
+        System.out.println(feetToInches.toString());
+
+        Length inchesToYards= demonstrateLengthConversion(new Length(40,LengthUnit.INCHES),LengthUnit.YARDS);
+        System.out.println(inchesToYards.toString());
 
     }
 }

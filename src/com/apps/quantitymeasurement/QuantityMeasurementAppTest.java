@@ -2,6 +2,7 @@ package com.apps.quantitymeasurement;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import com.apps.quantitymeasurement.QuantityMeasurementApp;
 
 public class QuantityMeasurementAppTest {
 
@@ -54,17 +55,6 @@ public class QuantityMeasurementAppTest {
         assertNotEquals(c1,c2);
     }
     @Test
-    public void testEquality_NullComparison(){
-        Length f1= new Length(1, Length.LengthUnit.FEET);
-        assertNotEquals(null,f1);
-    }
-    @Test
-    public void testEquality_InvalidUnit(){
-        Length f1= new Length(1, Length.LengthUnit.FEET);
-        String s= "1.0";
-        assertNotEquals(f1,s);
-    }
-    @Test
     public void testEquality_SameReference(){
         Length f1= new Length(1, Length.LengthUnit.FEET);
         assertEquals(f1,f1);
@@ -87,6 +77,26 @@ public class QuantityMeasurementAppTest {
                 assertEquals(length[i],length[j]);
             }
         }
+    }
+    @Test
+    public void testConversion_ZeroValue(){
+        Length actualVal= new Length(0,Length.LengthUnit.CENTIMETERS).convertTo(Length.LengthUnit.INCHES);
+        Length expectedLen= new Length(0, Length.LengthUnit.INCHES);
+        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(actualVal,expectedLen));
+    }
+    @Test
+    public void testEquality_InvalidUnit_Throws(){
+        Length length= new Length(10, Length.LengthUnit.FEET);
+        assertThrows(IllegalArgumentException.class,()->{
+            length.equals(null);
+        });
+    }
+    @Test
+    public void testConversion_InvalidUnit_Throws(){
+        Length length= new Length(10, Length.LengthUnit.FEET);
+        assertThrows(IllegalArgumentException.class,()->{
+            QuantityMeasurementApp.demonstrateLengthConversion(length,null);
+        });
     }
 
 }
