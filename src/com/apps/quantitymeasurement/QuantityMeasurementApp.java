@@ -1,5 +1,7 @@
 package com.apps.quantitymeasurement;
 
+import com.apps.quantitymeasurement.Length.LengthUnit;
+
 public class QuantityMeasurementApp {
 
     // Generic method to compare two lengths
@@ -7,40 +9,19 @@ public class QuantityMeasurementApp {
         return length1.equals(length2);
     }
 
-    // Demonstrate Feet equality
-    public static void demonstrateFeetEquality() {
-
-        Length l1 = new Length(5, Length.LengthUnit.FEET);
-        Length l2 = new Length(5, Length.LengthUnit.FEET);
-
-        System.out.println("5 feet == 5 feet : " +
-                demonstrateLengthEquality(l1, l2));
-    }
-
-    // Demonstrate Inches equality
-    public static void demonstrateInchesEquality() {
-
-        Length l1 = new Length(12, Length.LengthUnit.INCHES);
-        Length l2 = new Length(12, Length.LengthUnit.INCHES);
-
-        System.out.println("12 inches == 12 inches : " +
-                demonstrateLengthEquality(l1, l2));
-    }
-
-    // Demonstrate Feet and Inches comparison
-    public static void demonstrateFeetInchesComparison() {
-
-        Length l1 = new Length(5, Length.LengthUnit.FEET);
-        Length l2 = new Length(60, Length.LengthUnit.INCHES);
-
-        System.out.println("5 feet == 60 inches : " +
-                demonstrateLengthEquality(l1, l2));
+    public static void demonstrateLengthComparison(double val1, LengthUnit unit1, double val2, LengthUnit unit2){
+        Length length1= new Length(val1, unit1);
+        Length length2= new Length(val2, unit2);
+        boolean result= demonstrateLengthEquality(length1,length2);
+        System.out.println("Are lengths "+val1+" "+unit1+" and "+val2+" "+unit2+" equal: "+result);
     }
 
     public static void main(String[] args) {
 
-        demonstrateFeetEquality();
-        demonstrateInchesEquality();
-        demonstrateFeetInchesComparison();
+        demonstrateLengthComparison(12,LengthUnit.INCHES,1,LengthUnit.FEET);
+        demonstrateLengthComparison(36,LengthUnit.INCHES,1,LengthUnit.YARDS);
+        demonstrateLengthComparison(30,LengthUnit.FEET,10,LengthUnit.YARDS);
+        demonstrateLengthComparison(0.393701,LengthUnit.INCHES,1,LengthUnit.CENTIMETERS);
+
     }
 }
