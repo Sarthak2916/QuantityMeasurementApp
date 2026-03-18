@@ -108,7 +108,7 @@ public class QuantityMeasurementAppTest {
     public void addFeetAndInches(){
         Length length1= new Length(1, Length.LengthUnit.FEET);
         Length length2= new Length(12, Length.LengthUnit.INCHES);
-        Length sumLength= QuantityMeasurementApp.demonstrateLengthAddition(length1, length2);
+        Length sumLength= QuantityMeasurementApp.demonstrateLengthAddition(length1, length2, Length.LengthUnit.FEET);
         Length expectedLength= new Length(2, Length.LengthUnit.FEET);
         assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(sumLength,expectedLength));
     }
@@ -116,8 +116,16 @@ public class QuantityMeasurementAppTest {
     public void addYardsAndCentimeters(){
         Length length1= new Length(1, Length.LengthUnit.YARDS);
         Length length2= new Length(90, Length.LengthUnit.CENTIMETERS);
-        Length sumLength= QuantityMeasurementApp.demonstrateLengthAddition(length1, length2);
+        Length sumLength= QuantityMeasurementApp.demonstrateLengthAddition(length1, length2, Length.LengthUnit.YARDS);
         Length expectedLength= new Length(1.98, Length.LengthUnit.YARDS);
+        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(sumLength,expectedLength));
+    }
+    @Test
+    public void addFeetAndYardsWithTargetUnitCentimeters(){
+        Length length1= new Length(2, Length.LengthUnit.YARDS);
+        Length length2= new Length(4, Length.LengthUnit.FEET);
+        Length sumLength= QuantityMeasurementApp.demonstrateLengthAddition(length1, length2, Length.LengthUnit.CENTIMETERS);
+        Length expectedLength= new Length(304.8, Length.LengthUnit.CENTIMETERS);
         assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(sumLength,expectedLength));
     }
 

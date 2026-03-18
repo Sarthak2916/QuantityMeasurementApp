@@ -23,8 +23,8 @@ public class QuantityMeasurementApp {
         return length.convertTo(toUnit);
     }
 
-    public static Length demonstrateLengthAddition(Length length1, Length length2){
-        return length1.add(length2);
+    public static Length demonstrateLengthAddition(Length length1, Length length2, LengthUnit targetUnit){
+        return length1.add(length2, targetUnit);
     }
 
     public static void main(String[] args) {
@@ -41,7 +41,7 @@ public class QuantityMeasurementApp {
         Length length1= new Length(12, LengthUnit.FEET);
         Length length2= new Length(40,LengthUnit.CENTIMETERS);
 
-        System.out.println(length1.add(length2).toString());
+        System.out.println(length1.add(length2, LengthUnit.YARDS).toString());
 
     }
 }

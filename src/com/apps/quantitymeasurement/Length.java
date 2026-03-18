@@ -55,10 +55,13 @@ public class Length {
         return new Length(roundedVal, targetUnit);
     }
 
-    public Length add(Length thatLength){
-        double addition= this.convertedValue+thatLength.convertedValue;
-        double value= convertFromBaseToTargetUnit(addition, this.unit);
-        return new Length(value, this.unit);
+    public Length add(Length length, LengthUnit targetUnit){
+        return addAndConvert(length, targetUnit);
+    }
+    private Length addAndConvert(Length length, LengthUnit targetUnit){
+        double addition= this.convertedValue+length.convertedValue;
+        double value= convertFromBaseToTargetUnit(addition, targetUnit);
+        return new Length(value, targetUnit);
     }
     private double convertFromBaseToTargetUnit(double LengthInInches, LengthUnit targetUnit){
         double val= LengthInInches/targetUnit.getConversionFactor();
@@ -81,7 +84,7 @@ public class Length {
         Length converted= len1.convertTo(LengthUnit.INCHES);
         System.out.println(converted.toString());
 
-        System.out.println(l2.add(l1).toString());
+        System.out.println(l2.add(l1, LengthUnit.CENTIMETERS).toString());
 
     }
 }
