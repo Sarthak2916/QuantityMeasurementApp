@@ -35,7 +35,9 @@ public class Length {
         return unit.conversionFactor*value;
     }
     public boolean compare(Length length){
-        return Double.compare(this.convertedValue,length.convertedValue)==0 ? true:false;
+        BigDecimal bd1= new BigDecimal(this.convertedValue).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal bd2= new BigDecimal(length.convertedValue).setScale(2,RoundingMode.HALF_UP);
+        return Double.compare(bd1.doubleValue(),bd2.doubleValue())==0 ? true:false;
     }
     @Override
     public boolean equals(Object obj) throws IllegalArgumentException{
@@ -53,6 +55,18 @@ public class Length {
         return new Length(roundedVal, targetUnit);
     }
 
+    public Length add(Length thatLength){
+        double addition= this.convertedValue+thatLength.convertedValue;
+        double value= convertFromBaseToTargetUnit(addition, this.unit);
+        return new Length(value, this.unit);
+    }
+    private double convertFromBaseToTargetUnit(double LengthInInches, LengthUnit targetUnit){
+        double val= LengthInInches/targetUnit.getConversionFactor();
+        BigDecimal bd= new BigDecimal(val);
+        bd= bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
     public String toString(){
         return value+" "+unit;
     }
@@ -66,6 +80,8 @@ public class Length {
         Length len1= new Length(5, LengthUnit.FEET);
         Length converted= len1.convertTo(LengthUnit.INCHES);
         System.out.println(converted.toString());
+
+        System.out.println(l2.add(l1).toString());
 
     }
 }

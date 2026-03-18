@@ -98,5 +98,27 @@ public class QuantityMeasurementAppTest {
             QuantityMeasurementApp.demonstrateLengthConversion(length,null);
         });
     }
+    @Test
+    public void thirtyPoint48CmEqualsOneFoot(){
+        Length foot= new Length(1, Length.LengthUnit.FEET);
+        Length cm= new Length(30.48,Length.LengthUnit.CENTIMETERS);
+        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(foot,cm));
+    }
+    @Test
+    public void addFeetAndInches(){
+        Length length1= new Length(1, Length.LengthUnit.FEET);
+        Length length2= new Length(12, Length.LengthUnit.INCHES);
+        Length sumLength= QuantityMeasurementApp.demonstrateLengthAddition(length1, length2);
+        Length expectedLength= new Length(2, Length.LengthUnit.FEET);
+        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(sumLength,expectedLength));
+    }
+    @Test
+    public void addYardsAndCentimeters(){
+        Length length1= new Length(1, Length.LengthUnit.YARDS);
+        Length length2= new Length(90, Length.LengthUnit.CENTIMETERS);
+        Length sumLength= QuantityMeasurementApp.demonstrateLengthAddition(length1, length2);
+        Length expectedLength= new Length(1.98, Length.LengthUnit.YARDS);
+        assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(sumLength,expectedLength));
+    }
 
 }

@@ -23,6 +23,10 @@ public class QuantityMeasurementApp {
         return length.convertTo(toUnit);
     }
 
+    public static Length demonstrateLengthAddition(Length length1, Length length2){
+        return length1.add(length2);
+    }
+
     public static void main(String[] args) {
 
         demonstrateLengthComparison(30,LengthUnit.FEET,10,LengthUnit.YARDS);
@@ -33,6 +37,11 @@ public class QuantityMeasurementApp {
 
         Length inchesToYards= demonstrateLengthConversion(new Length(40,LengthUnit.INCHES),LengthUnit.YARDS);
         System.out.println(inchesToYards.toString());
+
+        Length length1= new Length(12, LengthUnit.FEET);
+        Length length2= new Length(40,LengthUnit.CENTIMETERS);
+
+        System.out.println(length1.add(length2).toString());
 
     }
 }
