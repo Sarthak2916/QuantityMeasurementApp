@@ -9,35 +9,16 @@ public class Length {
     private LengthUnit unit;
     private double convertedValue;
 
-    public enum LengthUnit{
-
-        FEET(12.0),
-        INCHES(1.0),
-        YARDS(36),
-        CENTIMETERS( 0.393701);
-
-        private final double conversionFactor;
-
-        LengthUnit(double conversionFactor){
-            this.conversionFactor= conversionFactor;
-        }
-        public double getConversionFactor(){
-            return conversionFactor;
-        }
-    }
-
     public Length(double value, LengthUnit unit){
         this.value= value;
         this.unit= unit;
         this.convertedValue= convertToBaseUnit();
     }
     private double convertToBaseUnit(){
-        return unit.conversionFactor*value;
+        return unit.convertToBaseUnit(value);
     }
     public boolean compare(Length length){
-        BigDecimal bd1= new BigDecimal(this.convertedValue).setScale(2,RoundingMode.HALF_UP);
-        BigDecimal bd2= new BigDecimal(length.convertedValue).setScale(2,RoundingMode.HALF_UP);
-        return Double.compare(bd1.doubleValue(),bd2.doubleValue())==0 ? true:false;
+        return Double.compare(this.convertedValue, length.convertedValue)==0 ? true:false;
     }
     @Override
     public boolean equals(Object obj) throws IllegalArgumentException{
@@ -48,11 +29,8 @@ public class Length {
 
     public Length convertTo(LengthUnit targetUnit) throws IllegalArgumentException{
         if(targetUnit==null) throw new IllegalArgumentException("Not a valid Argument");
-        double value=convertedValue/targetUnit.getConversionFactor();
-        BigDecimal bd= new BigDecimal(value);
-        bd= bd.setScale(2, RoundingMode.HALF_UP);
-        double roundedVal= bd.doubleValue();
-        return new Length(roundedVal, targetUnit);
+        double val= convertFromBaseToTargetUnit(value, targetUnit);
+        return new Length(val, targetUnit);
     }
 
     public Length add(Length length, LengthUnit targetUnit){
@@ -64,10 +42,7 @@ public class Length {
         return new Length(value, targetUnit);
     }
     private double convertFromBaseToTargetUnit(double LengthInInches, LengthUnit targetUnit){
-        double val= LengthInInches/targetUnit.getConversionFactor();
-        BigDecimal bd= new BigDecimal(val);
-        bd= bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        return unit.convertFromBaseToTargetUnit(LengthInInches, targetUnit);
     }
 
     public String toString(){
