@@ -29,7 +29,7 @@ public class Length {
 
     public Length convertTo(LengthUnit targetUnit) throws IllegalArgumentException{
         if(targetUnit==null) throw new IllegalArgumentException("Not a valid Argument");
-        double val= convertFromBaseToTargetUnit(value, targetUnit);
+        double val= convertFromBaseToTargetUnit(convertedValue, targetUnit);
         return new Length(val, targetUnit);
     }
 
