@@ -2,7 +2,6 @@ package com.apps.quantitymeasurement;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import com.apps.quantitymeasurement.QuantityMeasurementApp;
 
 public class QuantityMeasurementAppTest {
 
@@ -129,5 +128,101 @@ public class QuantityMeasurementAppTest {
         Length expectedLength= new Length(304.8, LengthUnit.CENTIMETERS);
         assertTrue(QuantityMeasurementApp.demonstrateLengthEquality(sumLength,expectedLength));
     }
+
+    @Test
+    public void testEquality_KilogramToKilogram_SameValue(){
+        Weight w1= new Weight(5, WeightUnit.KILOGRAM);
+        Weight w2= new Weight(5,WeightUnit.KILOGRAM);
+        assertTrue(QuantityMeasurementApp.demonstrateWeightEquality(w1,w2));
+    }
+    @Test
+    public void testEquality_KilogramToKilogram_DifferentValue(){
+        Weight w1= new Weight(5, WeightUnit.KILOGRAM);
+        Weight w2= new Weight(11,WeightUnit.KILOGRAM);
+        assertFalse(QuantityMeasurementApp.demonstrateWeightEquality(w1,w2));
+    }
+    @Test
+    public void testEquality_KilogramToGram_EquivalentValue(){
+        Weight w1= new Weight(5, WeightUnit.KILOGRAM);
+        Weight w2= new Weight(5000,WeightUnit.GRAM);
+        assertTrue(QuantityMeasurementApp.demonstrateWeightEquality(w1,w2));
+    }
+    @Test
+    public void testEquality_PoundToGram_EquivalentValue(){
+        Weight w1= new Weight(10, WeightUnit.POUND);
+        Weight w2= new Weight(4535.92,WeightUnit.GRAM);
+        assertTrue(QuantityMeasurementApp.demonstrateWeightEquality(w1,w2));
+    }
+    @Test
+    public void testEquality_NullComparison(){
+        Weight w1= new Weight(10, WeightUnit.MILLIGRAM);
+        assertThrows(IllegalArgumentException.class,()->QuantityMeasurementApp.demonstrateWeightEquality(w1,null));
+    }
+    @Test
+    public void test_NullUnit(){
+        assertThrows(IllegalArgumentException.class,()->new Weight(3,null));
+    }
+    @Test public void testConversion_PoundToKilogram(){
+        Weight actualWeight= new Weight(2.20462,WeightUnit.POUND).convertTo(WeightUnit.KILOGRAM);
+        Weight expectedWeight= new Weight(1,WeightUnit.KILOGRAM);
+        assertTrue(QuantityMeasurementApp.demonstrateWeightEquality(actualWeight,expectedWeight));
+    }
+
+    @Test public void testConversion_RoundTrip(){
+        Weight w= new Weight(10, WeightUnit.KILOGRAM).convertTo(WeightUnit.POUND).convertTo(WeightUnit.GRAM)
+                .convertTo(WeightUnit.KILOGRAM);
+        Weight expectedW= new Weight(10, WeightUnit.KILOGRAM);
+        assertTrue(QuantityMeasurementApp.demonstrateWeightEquality(w,expectedW));
+    }
+
+    @Test public void testAddition_SameUnit(){
+
+        Weight kg1= new Weight(5, WeightUnit.KILOGRAM);
+        Weight kg2= new Weight(10, WeightUnit.KILOGRAM);
+        Weight expectedKg= new Weight(15, WeightUnit.KILOGRAM);
+        Weight actualKg= QuantityMeasurementApp.demonstrateWeightAddition(kg1,kg2);
+
+        Weight p1= new Weight(5, WeightUnit.POUND);
+        Weight p2= new Weight(10, WeightUnit.POUND);
+        Weight expectedP= new Weight(15, WeightUnit.POUND);
+        Weight actualP= QuantityMeasurementApp.demonstrateWeightAddition(p1,p2);
+
+        Weight gm1= new Weight(5, WeightUnit.GRAM);
+        Weight gm2= new Weight(10, WeightUnit.GRAM);
+        Weight expectedGm= new Weight(15, WeightUnit.GRAM);
+        Weight actualGm= QuantityMeasurementApp.demonstrateWeightAddition(gm1,gm2);
+
+        assertAll("Test Addition Same Unit",
+                ()->assertEquals(expectedKg,actualKg),
+                ()->assertEquals(expectedP,actualP),
+                ()->assertEquals(expectedGm,actualGm)
+                );
+    }
+
+    @Test public void testAddition_CrossUnit(){
+
+        Weight kg = new Weight(1, WeightUnit.KILOGRAM);   // 1000 g
+        Weight gm = new Weight(500, WeightUnit.GRAM);     // 500 g
+        Weight expectedKg = new Weight(1.5, WeightUnit.KILOGRAM);
+        Weight actualKg = QuantityMeasurementApp.demonstrateWeightAddition(kg, gm);
+
+
+        Weight pound = new Weight(1, WeightUnit.POUND);   // 453.592 g
+        Weight gram = new Weight(546.408, WeightUnit.GRAM); // total = 1000 g
+        Weight expectedPound = new Weight(2.2, WeightUnit.POUND);
+        Weight actualPound = QuantityMeasurementApp.demonstrateWeightAddition(pound, gram);
+
+        Weight gm2 = new Weight(500, WeightUnit.GRAM);
+        Weight kg2 = new Weight(1, WeightUnit.KILOGRAM);
+        Weight expectedGram = new Weight(1500, WeightUnit.GRAM);
+        Weight actualGram = QuantityMeasurementApp.demonstrateWeightAddition(gm2, kg2);
+
+        assertAll("Test Addition Cross Units",
+                () -> assertEquals(expectedKg, actualKg),
+                () -> assertEquals(expectedPound, actualPound),
+                () -> assertEquals(expectedGram, actualGram)
+        );
+    }
+
 
 }
