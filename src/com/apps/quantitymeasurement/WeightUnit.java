@@ -3,7 +3,7 @@ package com.apps.quantitymeasurement;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public enum WeightUnit {
+public enum WeightUnit implements IMeasurable{
 
     MILLIGRAM(0.001),
     GRAM(1.0),
@@ -31,8 +31,8 @@ public enum WeightUnit {
         return bd.doubleValue();
     }
 
-    public double convertFromBaseToTargetUnit(double baseValue,  WeightUnit targetUnit){
-        double targetValue= baseValue/targetUnit.conversionFactor;
+    public <T extends IMeasurable> double convertFromBaseToTargetUnit(double baseValue, T targetUnit){
+        double targetValue= baseValue/targetUnit.getConversionFactor();
         BigDecimal bd= new BigDecimal(targetValue).setScale(2,RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
