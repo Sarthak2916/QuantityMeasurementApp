@@ -42,6 +42,8 @@ public class QuantityMeasurementApp {
         System.out.println(quantity1.add(quantity2, LengthUnit.YARDS).toString());
         System.out.println(demonstrateAddition(quantity1, quantity2).toString());
 
+        System.out.println();
+
         //Weight
         Quantity<WeightUnit> gramsToPounds= demonstrateConversion(54000,WeightUnit.GRAM,WeightUnit.POUND);
         System.out.println(gramsToPounds.toString());
@@ -54,6 +56,21 @@ public class QuantityMeasurementApp {
 
         System.out.println(weight1.add(weight2, WeightUnit.GRAM).toString());
         System.out.println(demonstrateAddition(weight1, weight2).toString());
+
+        System.out.println();
+
+        //Volume
+        Quantity<VolumeUnit> litreToMilli= demonstrateConversion(54,VolumeUnit.LITRE,VolumeUnit.MILLILITRE);
+        System.out.println(litreToMilli.toString());
+
+        Quantity<VolumeUnit> gallonsToLitre= demonstrateConversion(new Quantity<>(4,VolumeUnit.GALLON),VolumeUnit.LITRE);
+        System.out.println(gallonsToLitre.toString());
+
+        Quantity<VolumeUnit> volume1 = new Quantity(12, VolumeUnit.GALLON);
+        Quantity<VolumeUnit> volume2 = new Quantity(40,VolumeUnit.MILLILITRE);
+
+        System.out.println(volume1.add(volume2, VolumeUnit.LITRE).toString());
+        System.out.println(demonstrateAddition(volume1, volume2).toString());
 
     }
 }
