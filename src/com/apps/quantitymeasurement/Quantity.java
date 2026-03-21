@@ -22,10 +22,13 @@ public class Quantity <U extends IMeasurable>{
         return Double.compare(this.convertedValue, length.convertedValue)==0 ? true:false;
     }
     @Override
-    public boolean equals(Object obj) throws IllegalArgumentException{
+    public boolean equals(Object obj){
         if(obj==this) return true;
-        if(obj==null || obj.getClass()!= Quantity.class) throw new IllegalArgumentException("Not a valid Argument");
-        return compare((Quantity) obj);
+        if(obj==null || !(obj instanceof Quantity<?>)) return false;
+
+        Quantity<U> other= (Quantity<U>) obj;
+        if(!other.unit.getClass().equals(this.unit.getClass())) return false;
+        return compare(other);
     }
 
     public <U extends IMeasurable> Quantity<U> convertTo(U targetUnit) throws IllegalArgumentException{

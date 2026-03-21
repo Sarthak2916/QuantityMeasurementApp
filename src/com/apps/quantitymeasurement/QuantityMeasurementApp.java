@@ -3,7 +3,8 @@ package com.apps.quantitymeasurement;
 public class QuantityMeasurementApp {
 
     public static <U extends IMeasurable>
-    boolean demonstrateEquality(Quantity<U> quantity1, Quantity<U> quantity2) {
+    boolean demonstrateEquality(Quantity<U> quantity1, Quantity<U> quantity2) throws IllegalArgumentException {
+        if(quantity1==null || quantity2==null) throw new IllegalArgumentException("Not a valid value");
         return quantity1.equals(quantity2);
     }
 

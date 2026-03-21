@@ -88,7 +88,7 @@ public class QuantityMeasurementAppTest {
     public void testEquality_InvalidUnit_Throws(){
         Quantity<LengthUnit> quantity= new Quantity(10, LengthUnit.FEET);
         assertThrows(IllegalArgumentException.class,()->{
-            quantity.equals(null);
+            QuantityMeasurementApp.demonstrateEquality(quantity,null);
         });
     }
     @Test
@@ -175,7 +175,7 @@ public class QuantityMeasurementAppTest {
         assertTrue(QuantityMeasurementApp.demonstrateEquality(w,expectedW));
     }
 
-    @Test public void testAddition_SameUnit(){
+    @Test public void testAddition_Weight_SameUnit(){
 
         Quantity<WeightUnit> kg1= new Quantity(5, WeightUnit.KILOGRAM);
         Quantity<WeightUnit> kg2= new Quantity(10, WeightUnit.KILOGRAM);
@@ -199,7 +199,7 @@ public class QuantityMeasurementAppTest {
                 );
     }
 
-    @Test public void testAddition_CrossUnit(){
+    @Test public void testAddition_Weight_CrossUnit(){
 
         Quantity<WeightUnit> kg = new Quantity(1, WeightUnit.KILOGRAM);
         Quantity<WeightUnit> gm = new Quantity(500, WeightUnit.GRAM);
@@ -224,7 +224,69 @@ public class QuantityMeasurementAppTest {
         );
     }
 
+    @Test public void testEquality_LitreToLitre_SameValue(){
+        Quantity<VolumeUnit> v1= new Quantity<>(10,VolumeUnit.LITRE);
+        Quantity<VolumeUnit> v2= new Quantity<>(10,VolumeUnit.LITRE);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(v1,v2));
+    }
 
+    @Test public void testEquality_LitreToLitre_DifferentValue(){
+        Quantity<VolumeUnit> v1= new Quantity<>(10,VolumeUnit.LITRE);
+        Quantity<VolumeUnit> v2= new Quantity<>(12,VolumeUnit.LITRE);
+        assertFalse(QuantityMeasurementApp.demonstrateEquality(v1,v2));
+    }
+
+    @Test public void testEquality_LitreToMillilitre_EquivalentValue(){
+        Quantity<VolumeUnit> v1= new Quantity<>(10,VolumeUnit.LITRE);
+        Quantity<VolumeUnit> v2= new Quantity<>(10000,VolumeUnit.MILLILITRE);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(v1,v2));
+    }
+
+    @Test public void testEquality_GallonToLitre_EquivalentValue(){
+        Quantity<VolumeUnit> v1= new Quantity<>(10,VolumeUnit.GALLON);
+        Quantity<VolumeUnit> v2= new Quantity<>(37.85,VolumeUnit.LITRE);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(v1,v2));
+    }
+
+    @Test public void testEquality_VolumeVsLength_Incompatible(){
+        Quantity<VolumeUnit> v1= new Quantity<>(10,VolumeUnit.LITRE);
+        Quantity<LengthUnit> l1= new Quantity<>(10,LengthUnit.INCHES);
+        assertNotEquals(v1,l1);
+    }
+
+    @Test public void testEquality_VolumeVsWeight_Incompatible(){
+        Quantity<VolumeUnit> v1= new Quantity<>(10,VolumeUnit.LITRE);
+        Quantity<WeightUnit> w1= new Quantity<>(10,WeightUnit.KILOGRAM);
+        assertNotEquals(v1,w1);
+    }
+
+    @Test public void testConversion_LitreToMillilitre(){
+        Quantity<VolumeUnit> actualQuantity= new Quantity(2,VolumeUnit.LITRE).convertTo(VolumeUnit.MILLILITRE);
+        Quantity<VolumeUnit> expectedQuantity= new Quantity(2000,VolumeUnit.MILLILITRE);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(actualQuantity,expectedQuantity));
+    }
+
+    @Test public void testConversion_GallonsToMillilitre(){
+        Quantity<VolumeUnit> actualQuantity= new Quantity(2,VolumeUnit.GALLON).convertTo(VolumeUnit.MILLILITRE);
+        Quantity<VolumeUnit> expectedQuantity= new Quantity(7570.82,VolumeUnit.MILLILITRE);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(actualQuantity,expectedQuantity));
+    }
+
+    @Test public void testAddition_LitreAndLitre(){
+        Quantity<VolumeUnit> Quantity1= new Quantity(1, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> Quantity2= new Quantity(12, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> sumQuantity= QuantityMeasurementApp.demonstrateAddition(Quantity1, Quantity2);
+        Quantity<VolumeUnit> expectedQuantity= new Quantity(13, VolumeUnit.LITRE);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(sumQuantity,expectedQuantity));
+    }
+
+    @Test public void testAddition_LitreAndGallon(){
+        Quantity<VolumeUnit> Quantity1= new Quantity(3.785, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> Quantity2= new Quantity(1, VolumeUnit.GALLON);
+        Quantity<VolumeUnit> sumQuantity= QuantityMeasurementApp.demonstrateAddition(Quantity1, Quantity2, VolumeUnit.GALLON);
+        Quantity<VolumeUnit> expectedQuantity= new Quantity(2, VolumeUnit.GALLON);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(sumQuantity,expectedQuantity));
+    }
 
 
 }
