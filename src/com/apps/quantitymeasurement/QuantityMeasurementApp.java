@@ -26,6 +26,24 @@ public class QuantityMeasurementApp {
         return quantity1.add(quantity2, targetUnit);
     }
 
+    public static <U extends IMeasurable>
+    Quantity<U> demonstrateSubtraction(Quantity<U> quantity1, Quantity<U> quantity2){
+        return quantity1.subtract(quantity2);
+    }
+    public static <U extends IMeasurable>
+    Quantity demonstrateSubtraction(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
+        return quantity1.subtract(quantity2, targetUnit);
+    }
+
+    public static <U extends IMeasurable>
+    Quantity<U> demonstrateDivision(Quantity<U> quantity1, Quantity<U> quantity2){
+        return quantity1.divide(quantity2);
+    }
+    public static <U extends IMeasurable>
+    Quantity demonstrateDivision(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
+        return quantity1.divide(quantity2, targetUnit);
+    }
+
 
     public static void main(String[] args) {
 
@@ -42,6 +60,8 @@ public class QuantityMeasurementApp {
 
         System.out.println(quantity1.add(quantity2, LengthUnit.YARDS).toString());
         System.out.println(demonstrateAddition(quantity1, quantity2).toString());
+        System.out.println(demonstrateSubtraction(quantity1,quantity1).toString());
+        System.out.println(demonstrateDivision(quantity1,quantity1).toString());
 
         System.out.println();
 
@@ -57,6 +77,8 @@ public class QuantityMeasurementApp {
 
         System.out.println(weight1.add(weight2, WeightUnit.GRAM).toString());
         System.out.println(demonstrateAddition(weight1, weight2).toString());
+        System.out.println(demonstrateSubtraction(weight1,weight2).toString());
+        System.out.println(demonstrateDivision(weight1, weight2).toString());
 
         System.out.println();
 
@@ -72,6 +94,8 @@ public class QuantityMeasurementApp {
 
         System.out.println(volume1.add(volume2, VolumeUnit.LITRE).toString());
         System.out.println(demonstrateAddition(volume1, volume2).toString());
+        System.out.println(demonstrateSubtraction(volume1,volume2).toString());
+        System.out.println(demonstrateDivision(volume1,volume2).toString());
 
     }
 }

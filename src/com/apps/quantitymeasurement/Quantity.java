@@ -48,6 +48,32 @@ public class Quantity <U extends IMeasurable>{
         double value= convertFromBaseToTargetUnit(addition, targetUnit);
         return new Quantity(value, targetUnit);
     }
+
+    public Quantity<U> subtract(Quantity<U> quantity){
+        return subtractAndConvert(quantity, this.unit);
+    }
+    public <U extends IMeasurable> Quantity<U> subtract(Quantity<U> quantity, U targetUnit){
+        return subtractAndConvert(quantity, targetUnit);
+    }
+    private <U extends IMeasurable> Quantity<U> subtractAndConvert(Quantity<U> quantity, U targetUnit){
+        double addition= this.convertedValue-quantity.convertedValue;
+        double value= convertFromBaseToTargetUnit(addition, targetUnit);
+        return new Quantity(value, targetUnit);
+    }
+
+    public Quantity<U> divide(Quantity<U> quantity){
+        return divideAndConvert(quantity, this.unit);
+    }
+    public <U extends IMeasurable> Quantity<U> divide(Quantity<U> quantity, U targetUnit){
+        return divideAndConvert(quantity, targetUnit);
+    }
+    private <U extends IMeasurable> Quantity<U> divideAndConvert(Quantity<U> quantity, U targetUnit){
+        double addition= this.convertedValue/quantity.convertedValue;
+        double value= convertFromBaseToTargetUnit(addition, targetUnit);
+        return new Quantity(value, targetUnit);
+    }
+
+
     private <U extends IMeasurable> double convertFromBaseToTargetUnit(double baseValue, U targetUnit){
         return unit.convertFromBaseToTargetUnit(baseValue, targetUnit);
     }

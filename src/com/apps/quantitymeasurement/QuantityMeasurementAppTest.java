@@ -288,5 +288,52 @@ public class QuantityMeasurementAppTest {
         assertTrue(QuantityMeasurementApp.demonstrateEquality(sumQuantity,expectedQuantity));
     }
 
+    @Test public void testSubtraction_LitreAndGallon(){
+        Quantity<VolumeUnit> Quantity1= new Quantity(3.785, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> Quantity2= new Quantity(1, VolumeUnit.GALLON);
+        Quantity<VolumeUnit> subQuantity= QuantityMeasurementApp.demonstrateSubtraction(Quantity1, Quantity2, VolumeUnit.GALLON);
+        Quantity<VolumeUnit> expectedQuantity= new Quantity(0, VolumeUnit.GALLON);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(subQuantity,expectedQuantity));
+    }
+
+    @Test public void testSubtraction_FeetAndCentimetre(){
+        Quantity<LengthUnit> Quantity1= new Quantity(2, LengthUnit.FEET);
+        Quantity<LengthUnit> Quantity2= new Quantity(50, LengthUnit.CENTIMETERS);
+        Quantity<LengthUnit> subQuantity= QuantityMeasurementApp.demonstrateSubtraction(Quantity1, Quantity2, LengthUnit.INCHES);
+        Quantity<LengthUnit> expectedQuantity= new Quantity(4.31, LengthUnit.INCHES);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(subQuantity,expectedQuantity));
+    }
+
+    @Test public void testSubtraction_KilogramAndGram(){
+        Quantity<WeightUnit> Quantity1= new Quantity(5, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> Quantity2= new Quantity(5000, WeightUnit.GRAM);
+        Quantity<WeightUnit> subQuantity= QuantityMeasurementApp.demonstrateSubtraction(Quantity1, Quantity2, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> expectedQuantity= new Quantity(0, WeightUnit.KILOGRAM);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(subQuantity,expectedQuantity));
+    }
+
+    @Test public void testDivision_LitreAndGallon(){
+        Quantity<VolumeUnit> Quantity1= new Quantity(4, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> Quantity2= new Quantity(2, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> subQuantity= QuantityMeasurementApp.demonstrateDivision(Quantity1, Quantity2, VolumeUnit.LITRE);
+        Quantity<VolumeUnit> expectedQuantity= new Quantity(2, VolumeUnit.LITRE);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(subQuantity,expectedQuantity));
+    }
+
+    @Test public void testDivision_FeetAndCentimetre(){
+        Quantity<LengthUnit> Quantity1= new Quantity(2, LengthUnit.FEET);
+        Quantity<LengthUnit> Quantity2= new Quantity(50, LengthUnit.CENTIMETERS);
+        Quantity<LengthUnit> subQuantity= QuantityMeasurementApp.demonstrateDivision(Quantity1, Quantity2, LengthUnit.INCHES);
+        Quantity<LengthUnit> expectedQuantity= new Quantity(1.22, LengthUnit.INCHES);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(subQuantity,expectedQuantity));
+    }
+
+    @Test public void testDivision_KilogramAndGram(){
+        Quantity<WeightUnit> Quantity1= new Quantity(10, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> Quantity2= new Quantity(50, WeightUnit.GRAM);
+        Quantity<WeightUnit> subQuantity= QuantityMeasurementApp.demonstrateDivision(Quantity1, Quantity2, WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> expectedQuantity= new Quantity(0.2, WeightUnit.KILOGRAM);
+        assertTrue(QuantityMeasurementApp.demonstrateEquality(subQuantity,expectedQuantity));
+    }
 
 }
