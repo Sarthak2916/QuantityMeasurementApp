@@ -1,10 +1,31 @@
 package com.apps.quantitymeasurement;
 
+import java.util.function.DoubleBinaryOperator;
+
 public class Quantity <U extends IMeasurable>{
 
     private double value;
     private U unit;
     private double convertedValue;
+
+    private enum ArithmeticOperation{
+        ADD((a,b)->a+b),
+        SUBTRACT((a,b)->a-b),
+        DIVIDE((a,b)->{
+            if(b==0) throw new ArithmeticException("Divide by Zero");
+            return a/b;
+        });
+
+        private final DoubleBinaryOperator operation;
+
+        ArithmeticOperation(DoubleBinaryOperator operation){
+            this.operation= operation;
+        }
+
+        public double compute(double a, double b){
+            return operation.applyAsDouble(a,b);
+        }
+    }
 
     public Quantity(double value, U unit) throws IllegalArgumentException{
         this.value= value;
@@ -40,37 +61,49 @@ public class Quantity <U extends IMeasurable>{
     public Quantity<U> add(Quantity<U> quantity){
         return addAndConvert(quantity, this.unit);
     }
-    public <U extends IMeasurable> Quantity<U> add(Quantity<U> quantity, U targetUnit){
+    public Quantity<U> add(Quantity<U> quantity, U targetUnit){
         return addAndConvert(quantity, targetUnit);
     }
-    private <U extends IMeasurable> Quantity<U> addAndConvert(Quantity<U> quantity, U targetUnit){
-        double addition= this.convertedValue+quantity.convertedValue;
-        double value= convertFromBaseToTargetUnit(addition, targetUnit);
-        return new Quantity(value, targetUnit);
+    private Quantity<U> addAndConvert(Quantity<U> quantity, U targetUnit){
+        validateArithmeticOperands(quantity, targetUnit);
+        double value= performArithmetic(quantity,targetUnit,ArithmeticOperation.ADD);
+        return new Quantity<>(value, targetUnit);
     }
 
     public Quantity<U> subtract(Quantity<U> quantity){
         return subtractAndConvert(quantity, this.unit);
     }
-    public <U extends IMeasurable> Quantity<U> subtract(Quantity<U> quantity, U targetUnit){
+    public Quantity<U> subtract(Quantity<U> quantity, U targetUnit){
         return subtractAndConvert(quantity, targetUnit);
     }
-    private <U extends IMeasurable> Quantity<U> subtractAndConvert(Quantity<U> quantity, U targetUnit){
-        double addition= this.convertedValue-quantity.convertedValue;
-        double value= convertFromBaseToTargetUnit(addition, targetUnit);
-        return new Quantity(value, targetUnit);
+    private Quantity<U> subtractAndConvert(Quantity<U> quantity, U targetUnit){
+        validateArithmeticOperands(quantity, targetUnit);
+        double value= performArithmetic(quantity,targetUnit,ArithmeticOperation.SUBTRACT);
+        return new Quantity<>(value, targetUnit);
     }
 
     public Quantity<U> divide(Quantity<U> quantity){
         return divideAndConvert(quantity, this.unit);
     }
-    public <U extends IMeasurable> Quantity<U> divide(Quantity<U> quantity, U targetUnit){
+    public  Quantity<U> divide(Quantity<U> quantity, U targetUnit){
         return divideAndConvert(quantity, targetUnit);
     }
-    private <U extends IMeasurable> Quantity<U> divideAndConvert(Quantity<U> quantity, U targetUnit){
-        double addition= this.convertedValue/quantity.convertedValue;
-        double value= convertFromBaseToTargetUnit(addition, targetUnit);
-        return new Quantity(value, targetUnit);
+    private Quantity<U> divideAndConvert(Quantity<U> quantity, U targetUnit){
+        validateArithmeticOperands(quantity, targetUnit);
+        double value= performArithmetic(quantity,targetUnit,ArithmeticOperation.DIVIDE);
+        return new Quantity<>(value, targetUnit);
+    }
+
+    private void validateArithmeticOperands(Quantity<U> other, U targetUnit) throws IllegalArgumentException{
+        if(other==null) throw new IllegalArgumentException("Object is null");
+        if(targetUnit==null) throw new IllegalArgumentException("targetUnit is null");
+        if(!Double.isFinite(other.value) || !Double.isFinite(other.value)) throw new IllegalArgumentException("Invalid Numeric Value");
+        if(this.unit.getClass()!=targetUnit.getClass() || other.unit.getClass()!=targetUnit.getClass() || this.unit.getClass()!=other.unit.getClass() )
+            throw new IllegalArgumentException("Incompatible unit type");
+    }
+    private double performArithmetic(Quantity<U> other, U targetUnit, ArithmeticOperation operation){
+        double value= operation.compute(this.convertedValue,other.convertedValue);
+        return convertFromBaseToTargetUnit(value,targetUnit);
     }
 
 
@@ -103,6 +136,8 @@ public class Quantity <U extends IMeasurable>{
         System.out.println(converted2.toString());
 
         System.out.println(w2.add(w1, WeightUnit.POUND).toString());
+
+//        System.out.println(w1.add(q2));
 
     }
 

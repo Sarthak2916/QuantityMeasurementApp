@@ -10,7 +10,7 @@ public class QuantityMeasurementApp {
 
     public static <U extends IMeasurable>
     Quantity<U> demonstrateConversion(double value, U fromUnit, U toUnit){
-        return new Quantity(value,fromUnit).convertTo(toUnit);
+        return new Quantity<>(value,fromUnit).convertTo(toUnit);
     }
     public static <U extends IMeasurable>
     Quantity<U> demonstrateConversion(Quantity<U> quantity, U toUnit){
@@ -22,7 +22,7 @@ public class QuantityMeasurementApp {
         return quantity1.add(quantity2);
     }
     public static <U extends IMeasurable>
-    Quantity demonstrateAddition(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
+    Quantity<U> demonstrateAddition(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
         return quantity1.add(quantity2, targetUnit);
     }
 
@@ -31,7 +31,7 @@ public class QuantityMeasurementApp {
         return quantity1.subtract(quantity2);
     }
     public static <U extends IMeasurable>
-    Quantity demonstrateSubtraction(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
+    Quantity<U> demonstrateSubtraction(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
         return quantity1.subtract(quantity2, targetUnit);
     }
 
@@ -40,7 +40,7 @@ public class QuantityMeasurementApp {
         return quantity1.divide(quantity2);
     }
     public static <U extends IMeasurable>
-    Quantity demonstrateDivision(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
+    Quantity<U> demonstrateDivision(Quantity<U> quantity1, Quantity<U> quantity2, U targetUnit){
         return quantity1.divide(quantity2, targetUnit);
     }
 
@@ -55,8 +55,8 @@ public class QuantityMeasurementApp {
         Quantity<LengthUnit> inchesToYards= demonstrateConversion(new Quantity<>(40,LengthUnit.INCHES),LengthUnit.YARDS);
         System.out.println(inchesToYards.toString());
 
-        Quantity<LengthUnit> quantity1= new Quantity(12, LengthUnit.FEET);
-        Quantity<LengthUnit> quantity2= new Quantity(40,LengthUnit.CENTIMETERS);
+        Quantity<LengthUnit> quantity1= new Quantity<>(12, LengthUnit.FEET);
+        Quantity<LengthUnit> quantity2= new Quantity<>(40,LengthUnit.CENTIMETERS);
 
         System.out.println(quantity1.add(quantity2, LengthUnit.YARDS).toString());
         System.out.println(demonstrateAddition(quantity1, quantity2).toString());
@@ -72,8 +72,8 @@ public class QuantityMeasurementApp {
         Quantity<WeightUnit> kilosToMilligrams= demonstrateConversion(new Quantity<>(4,WeightUnit.KILOGRAM),WeightUnit.MILLIGRAM);
         System.out.println(kilosToMilligrams.toString());
 
-        Quantity<WeightUnit> weight1 = new Quantity(12, WeightUnit.POUND);
-        Quantity<WeightUnit> weight2 = new Quantity(40,WeightUnit.KILOGRAM);
+        Quantity<WeightUnit> weight1 = new Quantity<>(12, WeightUnit.POUND);
+        Quantity<WeightUnit> weight2 = new Quantity<>(40,WeightUnit.KILOGRAM);
 
         System.out.println(weight1.add(weight2, WeightUnit.GRAM).toString());
         System.out.println(demonstrateAddition(weight1, weight2).toString());
@@ -89,8 +89,8 @@ public class QuantityMeasurementApp {
         Quantity<VolumeUnit> gallonsToLitre= demonstrateConversion(new Quantity<>(4,VolumeUnit.GALLON),VolumeUnit.LITRE);
         System.out.println(gallonsToLitre.toString());
 
-        Quantity<VolumeUnit> volume1 = new Quantity(12, VolumeUnit.GALLON);
-        Quantity<VolumeUnit> volume2 = new Quantity(40,VolumeUnit.MILLILITRE);
+        Quantity<VolumeUnit> volume1 = new Quantity<>(12, VolumeUnit.GALLON);
+        Quantity<VolumeUnit> volume2 = new Quantity<>(40,VolumeUnit.MILLILITRE);
 
         System.out.println(volume1.add(volume2, VolumeUnit.LITRE).toString());
         System.out.println(demonstrateAddition(volume1, volume2).toString());
