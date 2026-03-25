@@ -22,4 +22,5 @@ public interface IMeasurable {
     default boolean supportsArithmetic(){
         return supportsArithmetic.isSupported();
     }
+    default void validateOperationSupport(String operation){}
 }

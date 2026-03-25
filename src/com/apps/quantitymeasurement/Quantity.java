@@ -102,6 +102,9 @@ public class Quantity <U extends IMeasurable>{
             throw new IllegalArgumentException("Incompatible unit type");
     }
     private double performArithmetic(Quantity<U> other, U targetUnit, ArithmeticOperation operation){
+
+        this.unit.validateOperationSupport(operation.name());
+        other.unit.validateOperationSupport(operation.name());
         double value= operation.compute(this.convertedValue,other.convertedValue);
         return convertFromBaseToTargetUnit(value,targetUnit);
     }
