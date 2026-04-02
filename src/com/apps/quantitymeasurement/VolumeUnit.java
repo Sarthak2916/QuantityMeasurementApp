@@ -1,38 +1,43 @@
 package com.apps.quantitymeasurement;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-public enum VolumeUnit implements IMeasurable {
-
-    LITRE(1),
+public enum VolumeUnit implements IMeasurable{
+    LITRE(1.0),
     MILLILITRE(0.001),
     GALLON(3.78541);
-
     private final double conversionFactor;
-
     VolumeUnit(double conversionFactor){
-        this.conversionFactor= conversionFactor;
+        this.conversionFactor=conversionFactor;
     }
+    @Override
     public double getConversionFactor(){
         return conversionFactor;
     }
-
+    @Override
     public double convertToBaseUnit(double value){
-        double baseValue= conversionFactor*value;
-        BigDecimal bd= new BigDecimal(baseValue).setScale(2, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        return value*getConversionFactor();
     }
-
+    @Override
     public double convertFromBaseUnit(double baseValue){
-        double targetValue= baseValue/conversionFactor;
-        BigDecimal bd= new BigDecimal(targetValue).setScale(2,RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        return baseValue/getConversionFactor();
     }
-
-    public <T extends IMeasurable> double convertFromBaseToTargetUnit(double baseValue, T targetUnit){
-        double targetValue= baseValue/targetUnit.getConversionFactor();
-        BigDecimal bd= new BigDecimal(targetValue).setScale(2,RoundingMode.HALF_UP);
-        return bd.doubleValue();
+    @Override
+    public String getUnitName(){
+        return this.name();
+    }
+    @Override
+    public String getMeasurementType(){
+        return "VOLUME";
+    }
+    @Override
+    public IMeasurable getUnitInstance(String unitName){
+        return VolumeUnit.valueOf(unitName);
+    }
+    @Override
+    public double fromBase(double resultBase) {
+        return convertFromBaseUnit(resultBase);
+    }
+    @Override
+    public double toBase(double value) {
+        return convertToBaseUnit(value);
     }
 }
