@@ -1,60 +1,71 @@
 package com.apps.quantitymeasurement;
 
-import java.util.List;
+import com.apps.quantitymeasurement.controller.QuantityMeasurementController;
+import com.apps.quantitymeasurement.entity.QuantityDTO;
+import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementDatabaseRepository;
+import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
+import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
+import com.apps.quantitymeasurement.util.ApplicationConfig;
+
+import java.util.logging.Logger;
 
 public class QuantityMeasurementApp {
+    // Logger for logging information and errors in the Application class
+    private static final Logger logger = Logger.getLogger(QuantityMeasurementApp.class.getName());
 
     private static QuantityMeasurementApp instance;
-    public QuantityMeasurementController controller;
-    public IQuantityMeasurementRepository repository;
+    private final QuantityMeasurementController controller;
+    private final IQuantityMeasurementRepository repository;
 
     private QuantityMeasurementApp() {
-        this.repository = QuantityMeasurementCacheRepository.getInstance();
+        ApplicationConfig config = ApplicationConfig.getInstance();
+        String repoType = config.getProperty("repository.type", "cache");
+
+        if ("database".equalsIgnoreCase(repoType)) {
+            this.repository = QuantityMeasurementDatabaseRepository.getInstance();
+        } else {
+            this.repository = QuantityMeasurementCacheRepository.getInstance();
+        }
+
         IQuantityMeasurementService service = new QuantityMeasurementServiceImpl(this.repository);
         this.controller = new QuantityMeasurementController(service);
+
+        logger.info("Quantity Measurement Application initialized with " + repoType + " repository");
     }
 
-    public static QuantityMeasurementApp getInstance() {
+    public static synchronized QuantityMeasurementApp getInstance() {
         if (instance == null) {
             instance = new QuantityMeasurementApp();
         }
         return instance;
     }
 
+    public QuantityMeasurementController getController() {
+        return controller;
+    }
+
+    public IQuantityMeasurementRepository getRepository() {
+        return repository;
+    }
+
     public static void main(String[] args) {
-        QuantityMeasurementApp app = QuantityMeasurementApp.getInstance();
+        QuantityMeasurementApp app = getInstance();
+        QuantityMeasurementController controller = app.getController();
 
-        // 1. Length Equality Demonstration
-        System.out.println("\nExample 1: Length Equality Demonstration");
-        QuantityDTO q1 = new QuantityDTO(1.0, QuantityDTO.LengthUnit.FEET);
-        QuantityDTO q2 = new QuantityDTO(12.0, QuantityDTO.LengthUnit.INCHES);
-        System.out.println("Compare 1.0 FEET and 12.0 INCHES: " + app.controller.performComparison(q1, q2));
+        // Testing comparison of two quantities as per UC16 prompt
+        QuantityDTO quantity1 = new QuantityDTO(2.0, QuantityDTO.LengthUnitDTO.FEET);
+        QuantityDTO quantity2 = new QuantityDTO(24.0, QuantityDTO.LengthUnitDTO.INCHES);
 
-        // 2. Temperature Addition Attempt
-        System.out.println("\nExample 2: Temperature Addition Attempt");
-        QuantityDTO t1 = new QuantityDTO(0.0, QuantityDTO.TemperatureUnit.CELSIUS);
-        QuantityDTO t2 = new QuantityDTO(32.0, QuantityDTO.TemperatureUnit.FAHRENHEIT);
-        try {
-            app.controller.performAddition(t1, t2);
-        } catch (QuantityMeasurementException e) {
-            System.out.println("Expected Error: " + e.getMessage());
-        }
+        boolean comparisonResult = controller.performComparison(quantity1, quantity2);
+        logger.info("Comparison result: " + comparisonResult);
 
-        // 3. Cross-Category Operation Prevention
-        System.out.println("\nExample 3: Cross-Category Operation Prevention");
-        QuantityDTO length = new QuantityDTO(1.0, QuantityDTO.LengthUnit.FEET);
-        QuantityDTO weight = new QuantityDTO(1.0, QuantityDTO.WeightUnit.KILOGRAM);
-        try {
-            app.controller.performComparison(length, weight);
-        } catch (QuantityMeasurementException e) {
-            System.out.println("Expected Error: " + e.getMessage());
-        }
+        // Show repository stats
+        logger.info("Total measurements in repository: " + app.getRepository().getTotalCount());
+        logger.info("Pool Statistics: " + app.getRepository().getPoolStatistics());
 
-        // 4. Print Repository History
-        System.out.println("\n--- Operation History from Repository ---");
-        List<QuantityMeasurementEntity> history = app.repository.getAllMeasurements();
-        for (QuantityMeasurementEntity entity : history) {
-            System.out.println(entity);
-        }
+        // Close resources
+        app.getRepository().releaseResources();
     }
 }

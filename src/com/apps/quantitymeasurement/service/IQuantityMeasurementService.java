@@ -1,4 +1,6 @@
-package com.apps.quantitymeasurement;
+package com.apps.quantitymeasurement.service;
+
+import com.apps.quantitymeasurement.entity.QuantityDTO;
 
 public interface IQuantityMeasurementService {
     boolean compare(QuantityDTO q1, QuantityDTO q2);

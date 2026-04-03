@@ -1,31 +1,38 @@
-package com.apps.quantitymeasurement;
+package com.apps.quantitymeasurement.entity;
+
+import com.apps.quantitymeasurement.unit.IMeasurable;
+import com.apps.quantitymeasurement.unit.LengthUnit;
+import com.apps.quantitymeasurement.unit.VolumeUnit;
+import com.apps.quantitymeasurement.unit.WeightUnit;
+import com.apps.quantitymeasurement.unit.TemperatureUnit;
 
 public class QuantityDTO {
 
-    public static interface IMeasurableUnit {
+    public interface IMeasurableUnit {
         String getUnitName();
         String getMeasurementType();
     }
 
-    public enum LengthUnit implements IMeasurableUnit {
+    // Making them public as requested
+    public enum LengthUnitDTO implements IMeasurableUnit {
         FEET, INCHES, YARDS, CENTIMETERS, METERS;
         @Override public String getUnitName() { return this.name(); }
         @Override public String getMeasurementType() { return "LENGTH"; }
     }
 
-    public enum VolumeUnit implements IMeasurableUnit {
-        LITER, MILLILITER, GALLON;
+    public enum VolumeUnitDTO implements IMeasurableUnit {
+        LITRE, MILLILITRE, GALLON;
         @Override public String getUnitName() { return this.name(); }
         @Override public String getMeasurementType() { return "VOLUME"; }
     }
 
-    public enum WeightUnit implements IMeasurableUnit {
-        GRAM, KILOGRAM, POUND, OUNCE;
+    public enum WeightUnitDTO implements IMeasurableUnit {
+        GRAM, KILOGRAM, POUND, TONNE;
         @Override public String getUnitName() { return this.name(); }
         @Override public String getMeasurementType() { return "WEIGHT"; }
     }
 
-    public enum TemperatureUnit implements IMeasurableUnit {
+    public enum TemperatureUnitDTO implements IMeasurableUnit {
         CELSIUS, FAHRENHEIT, KELVIN;
         @Override public String getUnitName() { return this.name(); }
         @Override public String getMeasurementType() { return "TEMPERATURE"; }
